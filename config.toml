@@ -1,12 +1,13 @@
 baseURL = "https://demon-i386.github.io"
-title = "HUGO.386"
+title = "Brazil0nChain"
 languageCode = "en"
 DefaultContentLanguage = "en" # Change this to change the site's language
 theme = "hugo386"
 preserveTaxonomyNames = true
+
 [params]
     # The name to display as main title in the home page
-    mainpagetitle = "HUGO.386"
+    mainpagetitle = "Brazil0nChain"
     # The subtitle to display under the title in the home page
     mainpagesubtitle = "Welcome to the early 90s!" 
     # The description of your website. It will be displayed in the home page

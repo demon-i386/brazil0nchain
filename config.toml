@@ -1,5 +1,5 @@
-baseURL = "https://brazil0nchain.com"
-title = "brazil0nchain"
+baseURL = "https://demon-i386.github.io"
+title = "Brazil0nchain"
 languageCode = "en"
 DefaultContentLanguage = "en" # Change this to change the site's language
 theme = "hugo386"
@@ -10,13 +10,13 @@ preserveTaxonomyNames = true
     mainpagetitle = "Brazil0nChain"
 
     # The subtitle to display under the title in the home page
-    mainpagesubtitle = "Quebrando as correntes!" 
+    mainpagesubtitle = "Brazil0nChain" 
 
     # The description of your website. It will be displayed in the home page
-    mainpagedesc = "Smart contract brazuca"
+    mainpagedesc = "This theme is the Hugo port of the BOOTSTRA.386 theme for a cool retro look on your blog. Check the links below to access the posts."
 
     # The name to display in the copyright section in the footer
-    copyrightname = "Brazil0nChain"
+    copyrightname = "JM Fergeau"
 
     # The url to use as link in the copyright name in the footer. Leave empty to use none.
     copyrighturl = "http://jmf-portfolio.netlify.com"

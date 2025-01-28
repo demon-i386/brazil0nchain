@@ -12,11 +12,13 @@ jobs:
         name: Checkout
         uses: actions/checkout@v4
       -
-        name: Remove gh-pages branch
+      - name: Remove all files from gh-pages branch
         run: |
-          git fetch --prune --unshallow
-          git branch -D gh-pages || true
-          git push origin --delete gh-pages  || true
+          git fetch origin gh-pages
+          git checkout gh-pages
+          git rm -rf .
+          git commit -m "Clean gh-pages branch"
+          git push origin gh-pages
       -
         name: Run Hugo
         uses: crazy-max/ghaction-hugo@v3
@@ -42,24 +44,4 @@ jobs:
           build_dir: public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  deploy:
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    needs: hugo
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
             

@@ -44,6 +44,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    needs: hugo
     runs-on: ubuntu-latest
     environment:
       name: github-pages

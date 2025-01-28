@@ -8,10 +8,6 @@ jobs:
   hugo:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-        
       - name: Remove all files from gh-pages branch
         run: |
           git config --global user.name "GitHub Actions"
@@ -21,6 +17,11 @@ jobs:
           git rm -rf .
           git commit -m "Clean gh-pages branch"
           git push origin gh-pages
+          git checkout -
+          
+      -
+        name: Checkout
+        uses: actions/checkout@v4
 
       -
         name: Run Hugo

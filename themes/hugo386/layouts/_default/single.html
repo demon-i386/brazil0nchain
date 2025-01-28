@@ -4,7 +4,7 @@
     <div class="page-header">
         <h1>{{ .Title }} - {{ .Date.Format "Mon, Jan 2, 2006" }}</h1>
     </div>
-    <p class="lead">{{ .Params.description }}</p>
+    <p class="lead">{{ .Params.description }}</br>Author: {{ .Params.author }}</p>
     {{ .Content }}
     <h4><a href="{{ .Site.BaseURL }}">{{ i18n "backtohome" }}</a></h4>
 </div>

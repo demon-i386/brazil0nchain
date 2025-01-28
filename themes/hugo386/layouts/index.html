@@ -22,6 +22,14 @@
             {{ end }}
             {{ end }}
         </ul>
+        <h1>{{ i18n "writeuplists" }}</h1>
+        <ul>
+            {{ range first 10 .Site.RegularPages }}
+            {{ if eq .Type "writeups" }}
+            <li><a href="{{ .Permalink }}">{{ .Date.Format "2006-01-02" }} | {{ .Title }}</a></li>
+            {{ end }}
+            {{ end }}
+        </ul>
     </div>
 
     <div class="span3 bs-docs-sidebar">

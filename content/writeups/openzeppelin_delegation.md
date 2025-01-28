@@ -11,7 +11,7 @@ categories = [
     "writeup",
     "openzeppelin",
 ]
-series = ["Writeuos"]
+series = ["Writeups"]
 +++
 
 Writeup para resolução do desafio "delegation", do CTF Ethernaut, do OpenZeppelin.
@@ -23,7 +23,7 @@ Desafio começa com a seguinte proposta:
 
 ![](images/d73f9657c81f499aaaa980e61b820dc6.png)
 
-´´´
+```
 O objetivo deste nível é que você reivindique a propriedade da instância do contrato que lhe foi fornecida.
 
   Coisas que podem ajudar
@@ -31,7 +31,7 @@ O objetivo deste nível é que você reivindique a propriedade da instância do 
 - Consulte a documentação do Solidity sobre a função de baixo nível "delegatecall", como ela funciona, como pode ser usada para delegar operações para bibliotecas on-chain e quais implicações ela tem no escopo de execução.
 - Métodos fallback
 - IDs de método
-´´´
+```
 
 Junto ao código do desafio:
 

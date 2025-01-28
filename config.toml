@@ -17,7 +17,12 @@ preserveTaxonomyNames = true
     # The url to use as link in the copyright name in the footer. Leave empty to use none.
     copyrighturl = ""
     # Show the "built on Hugo" disclaimer
+    # Show the "built on Hugo" disclaimer
     showhugo = false
+	
+	# set theme to full screen width
+	fullWidthTheme = true
+ 
     # Urls for social networks
     twitter = "https://x.com/brazil0nchain"
     # Enables or disables the loading animations. false activates them. Default is false.

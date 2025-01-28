@@ -19,6 +19,9 @@ jobs:
           extended: true
           args: --cleanDestinationDir --minify --verbose
       -
+        name: Create CNAME file
+        run: echo 'brazil0nchain.com' > public/CNAME
+      -
         name: Deploy to GitHub Pages
         if: success() && github.event_name != 'pull_request'
         uses: crazy-max/ghaction-github-pages@v2

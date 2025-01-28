@@ -25,6 +25,7 @@ preserveTaxonomyNames = true
  
     # Urls for social networks
     twitter = "https://x.com/brazil0nchain"
+    telegram = "https://t.me/+7XwHY3E3FDAyZjMx"
     # Enables or disables the loading animations. false activates them. Default is false.
     loadfastload = false
     # Sets the speed for the page loading effect. Default is 1.0.

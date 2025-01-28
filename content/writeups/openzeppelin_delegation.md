@@ -15,7 +15,7 @@ series = ["Writeups"]
 +++
 
 Writeup para resolução do desafio "delegation", do CTF Ethernaut, do OpenZeppelin.
-Neste writeup, apresentamos uma função bastante interessante utilizada na construção de smart contracts. Além de entender seu funcionamento, também exploramos um caso de vulnerabilidade que pode ser explorado.
+Neste writeup, apresentamos uma função bastante interessante utilizada na construção de smart contracts. Além de entender seu funcionamento, também vemos um caso de vulnerabilidade que pode ser explorado.
 
 ![](../attachment/c443f8b24547f0eac7c7ea65b2bb79ae.png)
 

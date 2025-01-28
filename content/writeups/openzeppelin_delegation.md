@@ -91,7 +91,7 @@ A função **fallback** é uma função especial executada no contrato quando ne
 
 Podemos passar o argumento global **msg.data**, utilizado pelo **delegatecall**, através do argumento **calldata**, é a área de armazenamento onde os dados da transação (ex: parâmetros) são mantidos.
 
-A função delegatecall leva como argumento a assinatura do método a ser executado dentro do contrato pré-definido. ( address(delegate).delegatecall(metodo_dentro_do_delegate) ).
+A função delegatecall leva como argumento a assinatura do método a ser executado dentro do contrato pré-definido. ( **address(delegate).delegatecall(metodo_dentro_do_delegate)** ).
 
 A assinatura da função é composta pelos primeiros 4 bytes do keccak256 (ou sha3) do seu nome e parâmetros, exemplo:
 
@@ -116,7 +116,9 @@ contract.sendTransaction({data:functionSignature,from:player})
 ![](../attachment/d42cbbc3066bc58332acbd18a7e36085.png)
 
 Enviando a transação com o payload:
+
 ![](../attachment/cc53f9148290272c34c1a71dc1fca898.png)
+
 
 Boom! somos os novos donos do contrato!
 

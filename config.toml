@@ -90,5 +90,10 @@ tag = "tags"
     lineNos = false
     lineNumbersInTable = true
     noClasses = true
-    style = "api"
+    # style = "api"
     tabWidth = 4
+
+[imaging]
+  resampleFilter = "lanczos"
+  quality = 100
+  anchor = "smart"  # Anchor for cropping. Options include Smart and Center.

@@ -9,15 +9,15 @@ preserveTaxonomyNames = true
     # The name to display as main title in the home page
     mainpagetitle = "Brazil0nChain"
     # The subtitle to display under the title in the home page
-    mainpagesubtitle = "Welcome to the early 90s!" 
+    mainpagesubtitle = "Welcome to the brazuca smart contract hacking world!" 
     # The description of your website. It will be displayed in the home page
-    mainpagedesc = "This theme is the Hugo port of the BOOTSTRA.386 theme for a cool retro look on your blog. Check the links below to access the posts."
+    mainpagedesc = "Segurança em smart contracts, escrito com carinho para o brazuca médio!"
     # The name to display in the copyright section in the footer
-    copyrightname = "JM Fergeau"
+    copyrightname = "demon-i386 / h4rry1337"
     # The url to use as link in the copyright name in the footer. Leave empty to use none.
-    copyrighturl = "http://jmf-portfolio.netlify.com"
+    copyrighturl = ""
     # Show the "built on Hugo" disclaimer
-    showhugo = true
+    showhugo = false
     # Urls for social networks
     facebook = "https://facebook.com"
     twitter = "https://twitter.com"
@@ -27,9 +27,10 @@ preserveTaxonomyNames = true
     # Enables or disables the loading animations. false activates them. Default is false.
     loadfastload = false
     # Sets the speed for the page loading effect. Default is 1.0.
-    loadspeedfactor = 1.0
+    loadspeedfactor = 0.5
     # Enables or disables the second flyby cursor. Default is false.
-    loadonepass = false
+    loadonepass = true
+    
 [params.copyright]
     name = "JM Fergeau"
     # The url to use as link in the copyright name in the footer. Leave empty to use none.

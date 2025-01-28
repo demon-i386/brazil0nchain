@@ -1,7 +1,7 @@
 +++
 title = "Sobre"
 description = "Sobre o Brazil0nChain"
-date = "2019-02-28"
+date = "2025-01-27"
 aliases = ["sobre"]
 author = "Brazil0nChain"
 +++

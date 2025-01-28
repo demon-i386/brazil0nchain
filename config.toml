@@ -23,9 +23,9 @@ preserveTaxonomyNames = true
     # Enables or disables the loading animations. false activates them. Default is false.
     loadfastload = false
     # Sets the speed for the page loading effect. Default is 1.0.
-    loadspeedfactor = 0.3
+    loadspeedfactor = 2.5
     # Enables or disables the second flyby cursor. Default is false.
-    loadonepass = true
+    loadonepass = false
     
 [params.copyright]
     name = ""
@@ -38,14 +38,19 @@ preserveTaxonomyNames = true
 [menu]
   # This displays buttons in the navbar to access your contents
   [[menu.main]]
-    identifier = "about" # An unique identifier for the button
-    name = "About"       # A display name for the button
-    url = "/about/"      # The path to the content. It can lead to a single page (like here)
+    identifier = "sobre" # An unique identifier for the button
+    name = "sobre"       # A display name for the button
+    url = "/sobre/"      # The path to the content. It can lead to a single page (like here)
     weight = 10          # A number to order the buttons in the navbar
   [[menu.main]]
     identifier = "posts"
-    name = "All posts"
+    name = "Posts"
     url = "/post/"       # The path can lead to a content folder too.
+    weight = 20
+[[menu.main]]
+    identifier = "writeups"
+    name = "Writeups"
+    url = "/writeups/"       # The path can lead to a content folder too.
     weight = 20
 [taxonomies]
 category = "categories"

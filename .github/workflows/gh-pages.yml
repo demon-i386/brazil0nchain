@@ -28,6 +28,12 @@ jobs:
         name: Create CNAME file
         run: echo 'brazil0nchain.com' > public/CNAME
       -
+        name: Upload Hugo build as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: github-pages
+          path: public
+      -
         name: Deploy to GitHub Pages
         if: success() && github.event_name != 'pull_request'
         uses: crazy-max/ghaction-github-pages@v4
@@ -36,6 +42,7 @@ jobs:
           build_dir: public
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
   deploy:
     permissions:
@@ -48,16 +55,21 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-        - name: Checkout gh-pages branch
-          uses: actions/checkout@v2
-          with:
-            ref: gh-pages
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: github-pages
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
             
-        - name: Deploy to GitHub Pages
-          id: deployment
-          uses: actions/deploy-pages@v4
-          with:
-            branch: gh-pages
-            build_dir: public
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          branch: gh-pages
+          build_dir: public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

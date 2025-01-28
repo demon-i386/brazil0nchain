@@ -22,7 +22,7 @@ preserveTaxonomyNames = true
     copyrighturl = "http://jmf-portfolio.netlify.com"
 
     # Show the "built on Hugo" disclaimer
-    showhugo = true
+    showhugo = false
 
     # Urls for social networks
     facebook = "https://facebook.com"

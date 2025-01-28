@@ -1,5 +1,5 @@
 +++
-author = "Pedro Silva"
+author = "Pedro Silva (demon-i386)"
 title = "OpenZeppelin - Delegation"
 date = "2024-01-27"
 description = "Writeup - EtherNaut (OpenZeppelin) / Delegation."

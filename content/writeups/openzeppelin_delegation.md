@@ -19,7 +19,7 @@ Neste writeup, apresentamos uma função bastante interessante utilizada na cons
 
 ![](../attachment/c443f8b24547f0eac7c7ea65b2bb79ae.png)
 
-Desafio começa com a seguinte proposta:
+O desafio começa com a seguinte proposta:
 
 ![](../attachment/d73f9657c81f499aaaa980e61b820dc6.png)
 

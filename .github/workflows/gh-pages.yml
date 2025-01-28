@@ -12,6 +12,12 @@ jobs:
         name: Checkout
         uses: actions/checkout@v4
       -
+        name: Remove gh-pages branch
+        run: |
+          git fetch --prune --unshallow
+          git branch -D gh-pages || true
+          git push origin --delete gh-pages || true
+      -
         name: Run Hugo
         uses: crazy-max/ghaction-hugo@v3
         with:

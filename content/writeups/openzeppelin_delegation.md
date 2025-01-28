@@ -56,7 +56,7 @@ A função **"delegatecall"** faz parte de um conjunto de chamadas utilizadas pa
 **Linha tirada da documentação**: _As mentioned in the introduction, if a library’s code is executed using a CALL instead of a DELEGATECALL or CALLCODE, it will revert unless a view or pure function is called._
 
 {  li e fiquei curioso (????)
-- função view: função que pode ler, mas não alterar variáveis definidas em um contrato;
+- função view: função que pode ler, mas não alterar variáveis definidas no estado;
 - função pure: função que não poder ler nem modificar o estado da blockchain;
 - revert: reverte todas as mudanças realizadas na blockchain.
 }

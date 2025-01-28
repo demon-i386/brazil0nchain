@@ -19,26 +19,22 @@ preserveTaxonomyNames = true
     # Show the "built on Hugo" disclaimer
     showhugo = false
     # Urls for social networks
-    facebook = "https://facebook.com"
-    twitter = "https://twitter.com"
-    linkedin = "https://linkedin.com"
-    github = "https://github.com"
-    gitlab = "https://gitlab.com"
+    twitter = "https://x.com/brazil0nchain"
     # Enables or disables the loading animations. false activates them. Default is false.
     loadfastload = false
     # Sets the speed for the page loading effect. Default is 1.0.
-    loadspeedfactor = 0.5
+    loadspeedfactor = 0.3
     # Enables or disables the second flyby cursor. Default is false.
     loadonepass = true
     
 [params.copyright]
-    name = "JM Fergeau"
+    name = ""
     # The url to use as link in the copyright name in the footer. Leave empty to use none.
-    url = "http://jmf-portfolio.netlify.com"
+    url = ""
     # Text to go before copyright information
-    prefix = "[hugo.386 theme by Max le Fou](https://gitlab.com/maxlefou/hugo.386)"
+    prefix = ""
     # Text to go between copyright and hugo disclaimer (if enabled)
-    suffix = "Example site"
+    suffix = ""
 [menu]
   # This displays buttons in the navbar to access your contents
   [[menu.main]]

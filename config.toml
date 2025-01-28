@@ -1,4 +1,4 @@
-baseURL = "https://demon-i386.github.io"
+baseURL = "https://brazil0nchain.com/"
 title = "Brazil0nChain"
 languageCode = "en"
 DefaultContentLanguage = "en" # Change this to change the site's language
@@ -28,7 +28,7 @@ preserveTaxonomyNames = true
     loadonepass = false
     
 [params.copyright]
-    name = ""
+    name = "demon-i386 / h4rry1337"
     # The url to use as link in the copyright name in the footer. Leave empty to use none.
     url = ""
     # Text to go before copyright information

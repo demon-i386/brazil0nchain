@@ -17,7 +17,7 @@ jobs:
         with:
           version: latest
           extended: false
-          args: --cleanDestinationDir --minify --verbose
+          args: --cleanDestinationDir --minify
       -
         name: Create CNAME file
         run: echo 'brazil0nchain.com' > public/CNAME

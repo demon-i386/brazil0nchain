@@ -39,7 +39,7 @@ preserveTaxonomyNames = true
   # This displays buttons in the navbar to access your contents
   [[menu.main]]
     identifier = "sobre" # An unique identifier for the button
-    name = "sobre"       # A display name for the button
+    name = "Sobre"       # A display name for the button
     url = "/sobre/"      # The path to the content. It can lead to a single page (like here)
     weight = 10          # A number to order the buttons in the navbar
   [[menu.main]]

@@ -1,7 +1,7 @@
 +++
 author = "Pedro Silva (demon-i386)"
 title = "OpenZeppelin - Delegation"
-date = "2024-01-27"
+date = "2025-01-27"
 description = "Writeup - EtherNaut (OpenZeppelin) / Delegation."
 tags = [
     "delegatecall",
@@ -95,22 +95,22 @@ A função delegatecall leva como argumento a assinatura do método a ser execut
 
 A assinatura da função é composta pelos primeiros 4 bytes do keccak256 (ou sha3) do seu nome e parâmetros, exemplo:
 
-
-```
-# sha3 completo
+{{< highlight javascript >}}
+// sha3 completo
 var funcSig = web3.utils.sha3('pwn()')
 '0xdd365b8b15d5d78ec041b851b68c8b985bee78bee0b87c4acf261024d8beabab'
 
-# 4 bytes
+// 4 bytes
 var functionSignature = web3.eth.abi.encodeFunctionSignature("pwn()")
 '0xdd365b8b'
-```
+{{< /highlight >}}
+
 
 Para chamar a função **fallback** por meio da biblioteca **web3.js**, utilizada pelo OpenZeppelin, podemos utilizar a função **sendTransaction**, mas funções nativas do Solidity como **call()**, **send()** ou **transfer()** também funcionam.
 
-```
+{{< highlight javascript >}}
 contract.sendTransaction({data:functionSignature,from:player})
-```
+{{< /highlight >}}
 
 
 ![](../attachment/d42cbbc3066bc58332acbd18a7e36085.png)

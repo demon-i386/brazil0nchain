@@ -17,11 +17,11 @@ series = ["Writeups"]
 Writeup para resolução do desafio "delegation", do CTF Ethernaut, do OpenZeppelin.
 Neste writeup, apresentamos uma função bastante interessante utilizada na construção de smart contracts. Além de entender seu funcionamento, também exploramos um caso de vulnerabilidade que pode ser explorado.
 
-![](images/c443f8b24547f0eac7c7ea65b2bb79ae.png)
+![](../attachment/c443f8b24547f0eac7c7ea65b2bb79ae.png)
 
 Desafio começa com a seguinte proposta:
 
-![](images/d73f9657c81f499aaaa980e61b820dc6.png)
+![](../attachment/d73f9657c81f499aaaa980e61b820dc6.png)
 
 ```
 O objetivo deste nível é que você reivindique a propriedade da instância do contrato que lhe foi fornecida.
@@ -35,7 +35,7 @@ O objetivo deste nível é que você reivindique a propriedade da instância do 
 
 Junto ao código do desafio:
 
-![](images/fc51c17a343f36157b73b4bfdcbad055.png)
+![](../attachment/fc51c17a343f36157b73b4bfdcbad055.png)
 
 Logo de cara, analisando o código, é possível identificar dois contratos: um chamado 'Delegation' e outro 'Delegate'.
 
@@ -43,13 +43,13 @@ Logo de cara, analisando o código, é possível identificar dois contratos: um 
 
 Endereço do dono do contrato e endereço do jogador:
 
-![](images/6e0efefec4bc89751f87c4a220e0b6ea.png)
+![](../attachment/6e0efefec4bc89751f87c4a220e0b6ea.png)
 - Nosso objetivo é fazer o jogador virar o novo dono do contrato.
 
 
 Analisando o contrato, é possível destacar alguns pontos de interesse, como por exemplo uma função nunca antes vista, chamada "delegatecall":
 
-![](images/04b195151116d471013d897b4420c774.png)
+![](../attachment/04b195151116d471013d897b4420c774.png)
 
 A função **"delegatecall"** faz parte de um conjunto de chamadas utilizadas para interações entre contratos, como **"call"** e **"callcode"**, mas com algumas diferenças entre elas:
 
@@ -67,7 +67,7 @@ A função **"delegatecall"** faz parte de um conjunto de chamadas utilizadas pa
 
 Fica claro que a execução começa no contrato **"Delegation"**, e isso se torna ainda mais evidente quando enumeramos as funções que o contrato possui (não possui a função **pwn()**):
 
-![](images/7d14f5e796e3d95850b8aa29b1917bbc.png)
+![](../attachment/7d14f5e796e3d95850b8aa29b1917bbc.png)
 
 Investigando o segundo contrato, podemos observar uma função que é capaz de alterar a variável **owner**, que define o dono do contrato, para o valor recebido através da variável global **msg.sender**. A variável **msg.sender** representa o endereço da conta ou contrato externo que enviou ou executou a transação.
 
@@ -77,7 +77,7 @@ Investigando o segundo contrato, podemos observar uma função que é capaz de a
 (!!!!) - **Plano**: Através do contrato **Delegation**, vamos utilizar a função **delegatecall** para chamar a função **pwn()** do contrato **Delegate**. Isso fará com que a variável **owner** seja alterada para o endereço de quem originou a transação (no nosso caso, **nós**), assumindo assim a propriedade do contrato.
 
 
-![](images/485f1acf182ea499aeed5b4cfe59d76c.png)
+![](../attachment/485f1acf182ea499aeed5b4cfe59d76c.png)
 
 Mas como interagir com o contrato Delegation para chegarmos ao trecho de código vulnerável? como passamos os argumentos para o "delegatecall"?
 
@@ -113,13 +113,13 @@ contract.sendTransaction({data:functionSignature,from:player})
 ```
 
 
-![](images/d42cbbc3066bc58332acbd18a7e36085.png)
+![](../attachment/d42cbbc3066bc58332acbd18a7e36085.png)
 
 Enviando a transação com o payload:
-![](images/cc53f9148290272c34c1a71dc1fca898.png)
+![](../attachment/cc53f9148290272c34c1a71dc1fca898.png)
 
 Boom! somos os novos donos do contrato!
 
-![](images/37dc865d1e62a4a659507c7e5c00c6e7.png)
+![](../attachment/37dc865d1e62a4a659507c7e5c00c6e7.png)
 
 

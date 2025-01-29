@@ -38,7 +38,7 @@ preserveTaxonomyNames = true
     # The url to use as link in the copyright name in the footer. Leave empty to use none.
     url = ""
     # Text to go before copyright information
-    prefix = ""
+    prefix = "RSS Feed habilitado!"
     # Text to go between copyright and hugo disclaimer (if enabled)
     suffix = ""
 [menu]

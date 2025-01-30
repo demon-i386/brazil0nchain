@@ -47,7 +47,7 @@ Endereço do dono do contrato e endereço do jogador:
 - Nosso objetivo é fazer o jogador virar o novo dono do contrato.
 
 
-Analisando o contrato, é possível destacar alguns pontos de interesse, como por exemplo uma função nunca antes vista, chamada "delegatecall":
+Analisando o contrato, é possível destacar alguns pontos de interesse, como por exemplo uma função nunca antes vista, chamada "**delegatecall**":
 
 ![](../attachment/04b195151116d471013d897b4420c774.png)
 
@@ -79,7 +79,7 @@ Investigando o segundo contrato, podemos observar uma função que é capaz de a
 
 ![](../attachment/485f1acf182ea499aeed5b4cfe59d76c.png)
 
-Mas como interagir com o contrato Delegation para chegarmos ao trecho de código vulnerável? como passamos os argumentos para o "delegatecall"?
+Mas como interagir com o contrato Delegation para chegarmos ao trecho de código vulnerável? como passamos os argumentos para o "**delegatecall**"?
 
 Observando o contrato Delegation é observado que o trecho de código está dentro de uma função chamada "fallback()".
 
@@ -91,9 +91,9 @@ A função **fallback** é uma função especial executada no contrato quando ne
 
 Podemos passar o argumento global **msg.data**, utilizado pelo **delegatecall**, através do argumento **calldata**, é a área de armazenamento onde os dados da transação (ex: parâmetros) são mantidos.
 
-A função delegatecall leva como argumento a assinatura do método a ser executado dentro do contrato pré-definido. ( **address(delegate).delegatecall(metodo_dentro_do_delegate)** ).
+A função **delegatecall** leva como argumento a assinatura do método a ser executado dentro do contrato pré-definido. ( **address(delegate).delegatecall(metodo_dentro_do_delegate)** ).
 
-A assinatura da função é composta pelos primeiros 4 bytes do keccak256 (ou sha3) do seu nome e parâmetros, exemplo:
+A assinatura da função é composta pelos primeiros 4 bytes do **keccak256** (ou **sha3**) do seu nome e parâmetros, exemplo:
 
 {{< highlight javascript >}}
 // sha3 completo

@@ -56,9 +56,9 @@ A função **"delegatecall"** faz parte de um conjunto de chamadas utilizadas pa
 **Linha tirada da documentação**: _As mentioned in the introduction, if a library’s code is executed using a CALL instead of a DELEGATECALL or CALLCODE, it will revert unless a view or pure function is called._
 
 {  li e fiquei curioso (????)
-- função view: função que pode ler, mas não alterar variáveis definidas no estado;
-- função pure: função que não poder ler nem modificar o estado da blockchain;
-- revert: reverte todas as mudanças realizadas na blockchain.
+- função **view**: função que pode ler, mas não alterar variáveis definidas no estado;
+- função **pure**: função que não poder ler nem modificar o estado da blockchain;
+- **revert**: reverte todas as mudanças realizadas na blockchain.
 }
 
 **Call**: O contrato A executa uma função no contrato B em um novo contexto, ou seja, o contrato B pode alterar suas próprias variáveis (estado/armazenamento), mas essas modificações não são refletidas no contrato A. (Modificações no contrato B não afetam o contrato A).
@@ -81,7 +81,7 @@ Investigando o segundo contrato, podemos observar uma função que é capaz de a
 
 Mas como interagir com o contrato Delegation para chegarmos ao trecho de código vulnerável? como passamos os argumentos para o "**delegatecall**"?
 
-Observando o contrato Delegation é observado que o trecho de código está dentro de uma função chamada "fallback()".
+Observando o contrato Delegation é observado que o trecho de código está dentro de uma função chamada **"fallback()"**.
 
 Segundo a documentação: *The receive function is executed on a call to the contract with empty calldata. This is the function that is executed on plain Ether transfers (e.g. via `.send()` or `.transfer()`). If no such function exists, but a payable [fallback function](https://docs.soliditylang.org/en/latest/contracts.html#fallback-function) exists, the fallback function will be called on a plain Ether transfer. If neither a receive Ether nor a payable fallback function is present, the contract cannot receive Ether through a transaction that does not represent a payable function call and throws an exception.*
 

@@ -247,7 +247,7 @@ Essa falha permitiu que o contrato malicioso executasse a função de saque de f
 
 #### Profit!
 
-Com o contrato malicioso em posse das reservas de **Ether** do contrato alvo, é possível realizar o saque de sua reversa interna para nossa carteira pessoal. 
+Com o contrato malicioso em posse das reservas de **Ether** do contrato alvo, é possível realizar o saque de sua reserva interna para nossa carteira pessoal. 
 
 
 ![](../attachment/e84f8d85710a58eb4467f9aee2ff2def.png)

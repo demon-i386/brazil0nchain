@@ -15,7 +15,7 @@ series = ["Writeups"]
 +++
 
 
-Neste writeup, apresentamos a resolução do desafio **“Reentrancy”**, do **CTF Ethernaut** (OpenZeppelin), que explora a exploração de um contrato inteligente vulnerável à falha de mesmo nome.
+Neste writeup, apresentamos a resolução do desafio **“Reentrancy”**, do **CTF Ethernaut** (OpenZeppelin), que descreve a exploração de um contrato inteligente vulnerável à falha de mesmo nome.
 A vulnerabilidade **Reentrancy** é classificada no **OWASP TOP 10 2025** como **SC05:2025** ([OWASP Smart Contract Top 10](https:/owasp.org/www-project-smart-contract-top-10/)) e já foi explorada em diversos ataques notáveis, como:
 
 - **The DAO Hack (2016)**

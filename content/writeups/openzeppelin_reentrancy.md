@@ -111,7 +111,7 @@ O contrato vulnerável realiza uma **chamada externa** (`call()`, no caso do con
 **Primeira Chamada do Atacante**:  
 O atacante, por meio de um contrato malicioso, deposita **Ether** no contrato vulnerável e chama a função de **saque** (`withdraw`). O contrato vulnerável **verifica** se há saldo suficiente e envia o Ether para o atacante.
 - Importante: Até então, o saldo interno do contrato não foi atualizado, já que a função `call()` foi chamada em um contrato externo.
-- Segundo a documentação, a função `call()` passa o contexto de execução para o contrato alvo: "*Calling a function on a different contract (instance) will perform an EVM function call and thus switch the context such that state variables in the calling contract are inaccessible*." - https:/docs.soliditylang.org/en/latest/contracts.html
+- Segundo a documentação, a função `call()` passa o contexto de execução para o contrato alvo: "*Calling a function on a different contract (instance) will perform an EVM function call and thus switch the context such that state variables in the calling contract are inaccessible*." - [Soliditylang Docs](https://docs.soliditylang.org/en/latest/contracts.html)
 
 **Execução da Função `receive()` do Atacante**:  
 Quando o contrato vulnerável envia **Ether** ao atacante, **a função `receive()`** do contrato malicioso é chamada automaticamente.  

@@ -19,9 +19,7 @@ preserveTaxonomyNames = true
     # Show the "built on Hugo" disclaimer
     # Show the "built on Hugo" disclaimer
     showhugo = false
-	
-	# set theme to full screen width
-	fullWidthTheme = true
+    fullWidthTheme = true
  
     # Urls for social networks
     twitter = "https://x.com/brazil0nchain"

@@ -17,20 +17,19 @@
     </p>
 
     <script>
-        document.addEventListener("readystatechange", () => {
-            if (document.readyState === "complete") {
-                console.log("Documento completamente carregado.");
-                
-                // Remover a div com a classe 'binance-widget__footer'
-                const element = document.querySelector(".binance-widget__footer");
+            const targetClass = "binance-widget__footer"; 
+            
+            const observer = new MutationObserver(() => {
+                const element = document.querySelector(`.${targetClass}`);
                 if (element) {
+                    console.log("Elemento encontrado! Removendo...");
+            
                     element.remove();
-                    console.log("Elemento removido com sucesso.");
-                } else {
-                    console.log("Elemento não encontrado.");
+                    observer.disconnect();
                 }
-            }
-        });
+            });
+            
+            observer.observe(document.body, { childList: true, subtree: true });
     </script>
     
     

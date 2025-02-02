@@ -4,12 +4,12 @@
         {{- partial "copyright.html" . -}}
     </p>
     <p class="text-center">
-        {{ with .Site.Params.facebook }}<a href="{{ . }}">Facebook</a> {{ end }}
+        {{ with .Site.Params.facebook }}<a href="{{ . }}">Facebook</a> | {{ end }}
         {{ with .Site.Params.telegram }}<a href="{{ . }}">Telegram</a> | {{ end }}
-        {{ with .Site.Params.twitter }}<a href="{{ . }}">Twitter</a> {{ end }}
-        {{ with .Site.Params.linkedin }}<a href="{{ . }}">Linkedin</a> {{ end }}
-        {{ with .Site.Params.github }}<a href="{{ . }}">GitHub</a> {{ end }}
-        {{ with .Site.Params.gitlab }}<a href="{{ . }}">GitLab</a>{{ end }}
+        {{ with .Site.Params.twitter }}<a href="{{ . }}">Twitter</a> | {{ end }}
+        {{ with .Site.Params.linkedin }}<a href="{{ . }}">Linkedin</a> | {{ end }}
+        {{ with .Site.Params.github }}<a href="{{ . }}">GitHub</a> | {{ end }}
+        {{ with .Site.Params.gitlab }}<a href="{{ . }}">GitLab</a> | {{ end }}
         {{ with .Site.Params.discord }}<a href="{{ . }}">Discord</a>{{ end }}
     </p>
 </footer>

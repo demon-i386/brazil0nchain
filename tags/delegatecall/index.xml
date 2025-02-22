@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Delegatecall on Brazil0nChain</title><link>https://brazil0nchain.com/tags/delegatecall/</link><description>Recent content in Delegatecall on Brazil0nChain</description><generator>Hugo</generator><language>en</language><lastBuildDate>Mon, 27 Jan 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://brazil0nchain.com/tags/delegatecall/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenZeppelin - Delegation</title><link>https://brazil0nchain.com/writeups/openzeppelin_delegation/</link><pubDate>Mon, 27 Jan 2025 00:00:00 +0000</pubDate><guid>https://brazil0nchain.com/writeups/openzeppelin_delegation/</guid><description>&lt;p>Writeup para resolução do desafio &amp;ldquo;delegation&amp;rdquo;, do CTF Ethernaut, do OpenZeppelin.
+Neste writeup, apresentamos uma função bastante interessante utilizada na construção de smart contracts. Além de entender seu funcionamento, também vemos um caso de vulnerabilidade que pode ser explorado.&lt;/p>
+&lt;p>&lt;img src="../attachment/c443f8b24547f0eac7c7ea65b2bb79ae.png" alt="">&lt;/p>
+&lt;p>O desafio começa com a seguinte proposta:&lt;/p>
+&lt;p>&lt;img src="../attachment/d73f9657c81f499aaaa980e61b820dc6.png" alt="">&lt;/p>
+&lt;pre tabindex="0">&lt;code>O objetivo deste nível é que você reivindique a propriedade da instância do contrato que lhe foi fornecida.
+
+ Coisas que podem ajudar
+
+- Consulte a documentação do Solidity sobre a função de baixo nível &amp;#34;delegatecall&amp;#34;, como ela funciona, como pode ser usada para delegar operações para bibliotecas on-chain e quais implicações ela tem no escopo de execução.
+- Métodos fallback
+- IDs de método
+&lt;/code>&lt;/pre>&lt;p>Junto ao código do desafio:&lt;/p></description></item></channel></rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Openzeppelin on Brazil0nChain</title><link>https://brazil0nchain.com/categories/openzeppelin/</link><description>Recent content in Openzeppelin on Brazil0nChain</description><generator>Hugo</generator><language>en</language><lastBuildDate>Sat, 01 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://brazil0nchain.com/categories/openzeppelin/index.xml" rel="self" type="application/rss+xml"/><item><title>OpenZeppelin - Reentrancy</title><link>https://brazil0nchain.com/writeups/openzeppelin_reentrancy/</link><pubDate>Sat, 01 Feb 2025 00:00:00 +0000</pubDate><guid>https://brazil0nchain.com/writeups/openzeppelin_reentrancy/</guid><description>&lt;p>Neste writeup, apresentamos a resolução do desafio &lt;strong>“Reentrancy”&lt;/strong>, do &lt;strong>CTF Ethernaut&lt;/strong> (OpenZeppelin), que descreve a exploração de um contrato inteligente vulnerável à falha de mesmo nome.
+A vulnerabilidade &lt;strong>Reentrancy&lt;/strong> é classificada no &lt;strong>OWASP TOP 10 2025&lt;/strong> como &lt;strong>SC05:2025&lt;/strong> (&lt;a href="https:/owasp.org/www-project-smart-contract-top-10/">OWASP Smart Contract Top 10&lt;/a>) e já foi explorada em diversos ataques notáveis, como:&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>The DAO Hack (2016)&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>Protocolo bZx (2020)&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>Lendf.me (2020)&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>Rari Capital (2022)&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;p>Dentre outros casos, esses ataques resultaram em prejuízos financeiros massivos para as empresas afetadas.&lt;/p></description></item><item><title>OpenZeppelin - Delegation</title><link>https://brazil0nchain.com/writeups/openzeppelin_delegation/</link><pubDate>Mon, 27 Jan 2025 00:00:00 +0000</pubDate><guid>https://brazil0nchain.com/writeups/openzeppelin_delegation/</guid><description>&lt;p>Writeup para resolução do desafio &amp;ldquo;delegation&amp;rdquo;, do CTF Ethernaut, do OpenZeppelin.
+Neste writeup, apresentamos uma função bastante interessante utilizada na construção de smart contracts. Além de entender seu funcionamento, também vemos um caso de vulnerabilidade que pode ser explorado.&lt;/p>
+&lt;p>&lt;img src="../attachment/c443f8b24547f0eac7c7ea65b2bb79ae.png" alt="">&lt;/p>
+&lt;p>O desafio começa com a seguinte proposta:&lt;/p>
+&lt;p>&lt;img src="../attachment/d73f9657c81f499aaaa980e61b820dc6.png" alt="">&lt;/p>
+&lt;pre tabindex="0">&lt;code>O objetivo deste nível é que você reivindique a propriedade da instância do contrato que lhe foi fornecida.
+
+ Coisas que podem ajudar
+
+- Consulte a documentação do Solidity sobre a função de baixo nível &amp;#34;delegatecall&amp;#34;, como ela funciona, como pode ser usada para delegar operações para bibliotecas on-chain e quais implicações ela tem no escopo de execução.
+- Métodos fallback
+- IDs de método
+&lt;/code>&lt;/pre>&lt;p>Junto ao código do desafio:&lt;/p></description></item></channel></rss>

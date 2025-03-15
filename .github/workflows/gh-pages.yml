@@ -33,6 +33,7 @@ jobs:
       -
         name: Create CNAME file
         run: echo 'brazil0nchain.com' > public/CNAME
+        run: echo 'dh=523d4da94ef8b970125d7f275c672b1bd8bf88dc' > public/.well-known/discord
       -
         name: Upload Hugo build as artifact
         uses: actions/upload-artifact@v4
